@@ -20,23 +20,23 @@ class KafkaTopicListenerTest {
 
     @Test
     void testListener() {
-         String testData = "J-unit test";
+        String testData = "J-unit test";
         ConsumerRecord<String, String> consumerRecord = new ConsumerRecord<>("dev", 0, 0L, null, testData);
-        KafkaTopicListener kafkaTopicListener = new KafkaTopicListener(kafkaTemplate);
+        KafkaTopicListeners kafkaTopicListener = new KafkaTopicListeners(kafkaTemplate);
         kafkaTopicListener.listener(consumerRecord, acknowledgment);
 
         verify(acknowledgment).acknowledge();
 
     }
 
-    record KafkaTopicListener(KafkaTemplate<String, String> kafkaTemplate) {
+    record KafkaTopicListeners(KafkaTemplate<String, String> kafkaTemplate) {
         @KafkaListener(topics = "dev", groupId = "dev1")
-            void listener(ConsumerRecord<String, String> consumerRecord, Acknowledgment acknowledgment) {
-                String data = consumerRecord.value();
-                System.out.println(data);
-                acknowledgment.acknowledge();
-            }
+        void listener(ConsumerRecord<String, String> consumerRecord, Acknowledgment acknowledgment) {
+            String data = consumerRecord.value();
+            System.out.println(data);
+            acknowledgment.acknowledge();
         }
+    }
 
 
 }
